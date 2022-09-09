@@ -18,6 +18,7 @@ class Apartment(Base):
     beds = Column(Integer)
     price = Column(Float(decimal_return_scale=2))
     currency = Column(String(1))
+    page = Column(Integer)
 
     def __repr__(self):
         return self.title
