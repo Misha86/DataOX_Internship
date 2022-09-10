@@ -56,7 +56,8 @@ def get_data(html_info):
     return image, title, date, location, description, bedrooms, price, currency
 
 
-def main(engine):
+def run(engine):
+    f = []
     with get_session(engine) as session:
         current_page = 1
         while True:
@@ -81,11 +82,10 @@ def main(engine):
                                       page=page)
                 session.add(apartment)
                 session.commit()
-                print(apartment.id)
+                f.append(apartment.id)
             current_page += 1
-            print("hhhhhhh", current_page, page)
 
 
 if __name__ == "__main__":
-    main(engine)
+    run(engine)
     os.system(f"pg_dump {settings['db_name']} > {settings['db_name']}_db.sql")
