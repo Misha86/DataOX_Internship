@@ -15,7 +15,7 @@ class Apartment(Base):
     date = Column(Date)
     city = Column(String(100))
     description = Column(Text)
-    beds = Column(Integer)
+    bedrooms = Column(String(100))
     price = Column(Float(decimal_return_scale=2))
     currency = Column(String(1))
     page = Column(Integer)
