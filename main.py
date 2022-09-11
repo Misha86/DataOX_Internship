@@ -1,7 +1,6 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-from datetime import (timedelta, datetime)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import (database_exists, create_database)
@@ -27,8 +26,8 @@ def get_session(eng):
 
 def get_html_content(page):
     url = f'https://www.kijiji.ca/b-apartments-condos/city-of-toronto/page-{page}/c37l1700273'
-    html = requests.get(url).content.decode('utf-8')
-    return html
+    with requests.get(url, stream=True) as r:
+        return r.content.decode('utf-8')
 
 
 def get_data(html_info):
@@ -41,13 +40,6 @@ def get_data(html_info):
     title = html_info.find("div", attrs={"class": "title"}).get_text(strip=" ")
     location = html_info.find("span", attrs={"class": ""}).get_text(strip=" ")
     date = html_info.find("span", attrs={"class": "date-posted"}).get_text(strip=" ")
-    if date[0] == "<":
-        data_delta = date.split()[1:3]
-        arg = data_delta[-1]
-        date = datetime.today().date() - timedelta(
-            **dict(((arg if arg[-1] == 's' else arg + "s", int(data_delta[-2])),)))
-    elif date == "Yesterday":
-        date = datetime.today().date() - timedelta(days=1)
     description = html_info.find("div", attrs={"class": "description"}).stripped_strings.__next__()
     image = html_info.find("div", attrs={"class": "image"}).find("img").get("data-src")
     if image is None:
@@ -57,7 +49,6 @@ def get_data(html_info):
 
 
 def run(engine):
-    f = []
     with get_session(engine) as session:
         current_page = 1
         while True:
@@ -82,7 +73,6 @@ def run(engine):
                                       page=page)
                 session.add(apartment)
                 session.commit()
-                f.append(apartment.id)
             current_page += 1
 
 
