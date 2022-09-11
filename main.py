@@ -27,7 +27,8 @@ def get_session(eng):
 def get_html_content(page):
     url = f'https://www.kijiji.ca/b-apartments-condos/city-of-toronto/page-{page}/c37l1700273'
     with requests.get(url, stream=True) as r:
-        return r.content.decode('utf-8')
+        html = r.content.decode('utf-8')
+    return html
 
 
 def get_data(html_info):
