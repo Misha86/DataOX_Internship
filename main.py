@@ -4,9 +4,9 @@ from bs4 import BeautifulSoup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import (database_exists, create_database)
-from pg_settings import postgresql as settings
 
 from models import (Apartment, Base)
+from decouple import config
 
 
 def get_postgres_engine(user, passwd, host, port, db):
@@ -16,7 +16,11 @@ def get_postgres_engine(user, passwd, host, port, db):
     return create_engine(url, echo=True)
 
 
-engine = get_postgres_engine(*settings.values())
+engine = get_postgres_engine(user=config("user"),
+                             passwd=config("password"),
+                             host=config("host"),
+                             port=config("port"),
+                             db=config("db_name"))
 Base.metadata.create_all(engine)
 
 
@@ -79,4 +83,4 @@ def run(engine):
 
 if __name__ == "__main__":
     run(engine)
-    os.system(f"pg_dump {settings['db_name']} > {settings['db_name']}_db.sql")
+    os.system(f"pg_dump {config('db_name')} > {config('db_name')}_db.sql")
