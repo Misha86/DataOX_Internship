@@ -10,14 +10,26 @@ git clone https://github.com/Misha86/DataOX_Internship.git
 ```
 ### Required to install
 
-- [![Python](https://docs.python.org/3.9/_static/py.svg)](https://www.python.org/downloads/release/python-3912/) 3.9.12
-- PostgresSql
-- Install dependencies from file requirements.txt
+- Docker
 ```
-pip install -r /requirements.txt
+https://docs.docker.com/get-docker/
 ```
-- Start program
+### Start program
+
+- For starting the program you should be inside the project root directory
 ```
-python -m main
+cd DataOX_Internship
+```
+- Start program without logs
+```
+docker-compose up -d
+```
+- Start program with logs
+```
+docker-compose up
+```
+- After a few minutes file with scraping data creates in the root dir
+```
+apartments_db.sql
 ```
 
