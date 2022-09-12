@@ -19,7 +19,7 @@ class Apartment(Base):
     description = Column(Text)
     bedrooms = Column(String(100))
     price = Column(Float(decimal_return_scale=2))
-    currency = Column(String(1))
+    currency = Column(String(1), nullable=True)
     page = Column(Integer)
 
     @validates('date')
