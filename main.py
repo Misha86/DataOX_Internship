@@ -16,11 +16,11 @@ def get_postgres_engine(user, passwd, host, port, db):
     return create_engine(url, echo=True)
 
 
-engine = get_postgres_engine(user=config("user"),
-                             passwd=config("password"),
-                             host=config("host"),
-                             port=config("port"),
-                             db=config("db_name"))
+engine = get_postgres_engine(user=config("POSTGRES_USER"),
+                             passwd=config("POSTGRES_PASSWORD"),
+                             host=config("POSTGRES_HOST"),
+                             port=config("POSTGRES_PORT"),
+                             db=config("POSTGRES_DB"))
 Base.metadata.create_all(engine)
 
 
@@ -78,9 +78,11 @@ def run(engine):
                                       page=page)
                 session.add(apartment)
                 session.commit()
+                print(apartment)
             current_page += 1
+            break
 
 
 if __name__ == "__main__":
     run(engine)
-    os.system(f"pg_dump {config('db_name')} > {config('db_name')}_db.sql")
+    os.system(f"pg_dump {config('POSTGRES_DB')} > {config('POSTGRES_DB')}_db.sql")
