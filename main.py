@@ -91,11 +91,11 @@ def save_data(engine):
                                       price=price,
                                       currency=currency,
                                       page=page))
-                session.commit()
+            session.commit()
             current_page += 1
 
 
 if __name__ == "__main__":
     save_data(engine)
-    os.system(f"PGPASSWORD='{config('POSTGRES_PASSWORD')}' pg_dump -h db -U {config('POSTGRES_USER')}"
-              f" -d {config('POSTGRES_DB')} > {config('POSTGRES_DB')}_db.sql")
+    os.system(f"PGPASSWORD='{config('POSTGRES_PASSWORD')}' pg_dump -h {config('POSTGRES_HOST')} "
+              f"-U {config('POSTGRES_USER')} -d {config('POSTGRES_DB')} > {config('POSTGRES_DB')}_db.sql")
